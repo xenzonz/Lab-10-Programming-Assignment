@@ -14,22 +14,39 @@ import string
 from pathlib import Path
 
 class WordAnalyzer:
-    
-    def __init__(self, filepath):
-        
-        self.__filepath = Path(filepath)
-        self.__frequency = {}
+    """
+    Analyze a text file and count the frequency of alphabetic words.
+    """
+    def __init__(self, filepath: str | Path) -> None:
+        """
+        Initialize the analyzer with the path to a text file.
+
+        Args:
+            filepath: The path to the file that will be analyzed.
+        """
+        self.__filepath: Path = Path(filepath)
+        self.__frequency: dict[str, int] = {}
     
     def process_file(self) -> bool:
+        """
+        Read the file and build a frequency dictionary of valid words.
+
+        The text is converted to lowercase, punctuation is removed, and
+        only alphabetic words are counted. Words beginning with 'www'
+        are skipped.
+
+        Returns:
+            True if the file was processed successfully, otherwise False.
+        """
         try:
             if not self.__filepath.exists():
                 raise FileNotFoundError
             
-            translator = str.maketrans("", "", string.punctuation + "“”‘’")
+            translator: dict[int, None] = str.maketrans("", "", string.punctuation + "“”‘’")
 
             with self.__filepath.open("r", encoding="utf-8-sig") as file:
                 for line in file:
-                    cleaned_line = line.lower().translate(translator)
+                    cleaned_line: str = line.lower().translate(translator)
                     cleaned_words: list[str] = cleaned_line.split()
 
                     for word in cleaned_words:
@@ -49,17 +66,24 @@ class WordAnalyzer:
             print(f"File not found: {self.__filepath}")
             return False
     
-    def print_report(self):
-
-        sorted_words = sorted(self.__frequency.keys())
+    def print_report(self) -> None:
+        """
+        Print all words and their frequencies in alphabetical order.
+        """
+        sorted_words: list[str] = sorted(self.__frequency.keys())
 
         for word in sorted_words:
             print(f"{word:<25}:: {self.__frequency[word]}")
 
 
-def file_menu():
+def file_menu() -> dict[str, Path]:
+    """
+    Build and return the menu of available files.
 
-    base_path = Path(__file__).parent
+    Returns:
+        A dictionary mapping menu option strings to file paths.
+    """
+    base_path: Path = Path(__file__).parent
     file_options: dict[str, Path] = {
         "1": base_path / "monte_cristo.txt",
         "2": base_path / "princess_mars.txt",
@@ -70,11 +94,23 @@ def file_menu():
     return file_options
 
 def display_name(filepath: Path) -> str:
+    """
+    Convert a file path into a cleaner display name.
+
+    Args:
+        filepath: The path of the file.
+
+    Returns:
+        A title-cased display name without the file extension.
+    """
     return filepath.stem.replace("_", " ").title()
     
-def main():
-    files = file_menu()
-    exit_key = str(len(files) + 1) #"5" when there are 4 files, etc.
+def main() -> None:
+    """
+    Display the menu, process the user's selection, and show the report.
+    """
+    files: dict[str, Path] = file_menu()
+    exit_key: str = str(len(files) + 1) #"5" when there are 4 files, etc.
 
     while True:
         print("\n--- Word Analyzer ---")
@@ -84,7 +120,7 @@ def main():
             print(f"  {key}. {display_name(filepath)}")
         print(f"  {exit_key}. Exit\n")
 
-        choice = input(f"Enter your choice (1-{exit_key}): ").strip()
+        choice: str = input(f"Enter your choice (1-{exit_key}): ").strip()
 
         if choice == exit_key:
             print("\nGoodbye!")
@@ -95,10 +131,10 @@ def main():
             input("\nPress Enter to return to the menu... ")
             continue
 
-        filepath = files[choice]
+        filepath: Path = files[choice]
         print(f"\nProcessing '{filepath.name}'...\n")
 
-        analyzer = WordAnalyzer(filepath)
+        analyzer: WordAnalyzer = WordAnalyzer(filepath)
         if analyzer.process_file():
             analyzer.print_report()
 
