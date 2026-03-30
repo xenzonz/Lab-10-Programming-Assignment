@@ -55,14 +55,24 @@ class WordAnalyzer:
 
 def file_menu():
 
-    return 0
+    base_path = Path(__file__).parent
+    file_options: dict[str, Path] = {
+        "1": base_path / "monte_cristo.txt",
+        "2": base_path / "princess_mars.txt",
+        "3": base_path / "Tarzan.txt",
+        "4": base_path / "treasure_island.txt",
+    }
+
+    return file_options
     
 def main():
+    files = file_menu()
+    exit_key = str(len(files) + 1) #should be 5 but can be 8 or something if more files are added
+    
 
-    analyzer = WordAnalyzer("Tarzan.txt")
 
-    if analyzer.process_file():
-        analyzer.print_report()
+
+
 
 
 if __name__ == "__main__":
