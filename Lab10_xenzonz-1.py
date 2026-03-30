@@ -17,11 +17,20 @@ from pathlib import Path
 class WordAnalyzer:
     
     def __init__(self, filepath):
-        return 0
+        
+        self.__filepath = Path(filepath)
+        self.__frequency = {}
     
-    def process_file(self):
-        #main logic
-        return 0
+    def process_file(self) -> bool:
+        try:
+            if not self.__filepath.exists():
+                raise FileNotFoundError
+            
+            translator = str.maketrans("", "", string.punctuation)
+
+        except FileNotFoundError:
+            print(f"file not found: {self.__filepath}")
+            return False
     
     def print_report(self):
         return 0
