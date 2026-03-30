@@ -34,9 +34,11 @@ class WordAnalyzer:
                     cleaned_words: list[str] = cleaned_line.split()
 
                     for word in cleaned_words:
-                        if not word.isalpha():
+                        if not word.isalpha(): #remove numbers
                             continue
-                        
+                        if word.startswith("www"): #remove wwwgutenbergorg
+                            continue
+
                         if word in self.__frequency:
                             self.__frequency[word] += 1
                         else:
@@ -54,7 +56,6 @@ class WordAnalyzer:
 
         for word in sorted_words:
             print(f"{word:<25}:: {self.__frequency[word]}")
-            #print(repr(word), "::", self.__frequency[word])
 
 
 def file_menu():
@@ -100,15 +101,6 @@ def main():
             analyzer.print_report()
 
         input("\nPress Enter to return to the menu...")
-
-
-
-
-
-
-
-
-
 
 
 if __name__ == "__main__":
