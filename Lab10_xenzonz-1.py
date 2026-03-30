@@ -50,7 +50,12 @@ class WordAnalyzer:
         sorted_words = sorted(self.__frequency.keys())
 
         for word in sorted_words:
-            print(f"{word}: {self.__frequency[word]}")
+            print(f"{word:<25}:: {self.__frequency[word]}")
+
+
+def file_menu():
+
+    return 0
     
 def main():
 
