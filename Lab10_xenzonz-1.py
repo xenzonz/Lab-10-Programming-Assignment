@@ -31,7 +31,7 @@ class WordAnalyzer:
             with self.__filepath.open("r", encoding="utf-8") as file:
                 for line in file:
                     cleaned_line = line.lower().translate(translator)
-                    cleaned_words: list[str] = cleaned_line.split
+                    cleaned_words: list[str] = cleaned_line.split()
 
                     for word in cleaned_words:
                         if word in self.__frequency:
@@ -53,7 +53,12 @@ class WordAnalyzer:
             print(f"{word}: {self.__frequency[word]}")
     
 def main():
-    return 0
+
+    analyzer = WordAnalyzer("Tarzan.txt")
+
+    if analyzer.process_file():
+        analyzer.print_report()
+
 
 if __name__ == "__main__":
     main()
