@@ -26,9 +26,9 @@ class WordAnalyzer:
             if not self.__filepath.exists():
                 raise FileNotFoundError
             
-            translator = str.maketrans("", "", string.punctuation)
+            translator = str.maketrans("", "", string.punctuation + "“”‘’")
 
-            with self.__filepath.open("r", encoding="utf-8") as file:
+            with self.__filepath.open("r", encoding="utf-8-sig") as file:
                 for line in file:
                     cleaned_line = line.lower().translate(translator)
                     cleaned_words: list[str] = cleaned_line.split()
@@ -51,24 +51,57 @@ class WordAnalyzer:
 
         for word in sorted_words:
             print(f"{word:<25}:: {self.__frequency[word]}")
+            #print(repr(word), "::", self.__frequency[word])
 
 
 def file_menu():
 
     base_path = Path(__file__).parent
     file_options: dict[str, Path] = {
-        "1": base_path / "monte_cristo.txt",
-        "2": base_path / "princess_mars.txt",
-        "3": base_path / "Tarzan.txt",
-        "4": base_path / "treasure_island.txt",
+        "1": ("Monte Cristo", base_path / "monte_cristo.txt"),
+        "2": ("Princess of Mars", base_path / "princess_mars.txt"),
+        "3": ("Tarzan", base_path / "Tarzan.txt"),
+        "4": ("Treasure Island", base_path / "treasure_island.txt"),
     }
 
     return file_options
     
 def main():
     files = file_menu()
-    exit_key = str(len(files) + 1) #should be 5 but can be 8 or something if more files are added
-    
+    exit_key = str(len(files) + 1) #"5" when there are 4 files, etc.
+
+    while True:
+        print("\n--- Word Analyzer ---")
+        print("Please select a file to analyze:")
+
+        for key, (label, _) in files.items():
+            print(f"  {key}. {label}")
+        print(f"  {exit_key}. Exit\n")
+
+        choice = input(f"Enter your choice (1-{exit_key}): ").strip()
+
+        if choice == exit_key:
+            print("\nGoodbye!")
+            break
+
+        if choice not in files:
+            print(f"\nInvalid choice. Please select from 1-{exit_key}.")
+            input("\nPress Enter to return to the menu... ")
+            continue
+
+        label, filepath = files[choice]
+        print(f"\nProcessing '{filepath.name}'...\n")
+
+        analyzer = WordAnalyzer(filepath)
+        if analyzer.process_file():
+            analyzer.print_report()
+
+        input("\nPress Enter to return to the menu...")
+
+
+
+
+
 
 
 
