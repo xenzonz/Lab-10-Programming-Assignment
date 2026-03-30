@@ -31,20 +31,26 @@ class WordAnalyzer:
             with self.__filepath.open("r", encoding="utf-8") as file:
                 for line in file:
                     cleaned_line = line.lower().translate(translator)
-                    words: list[str] = cleaned_line.split
+                    cleaned_words: list[str] = cleaned_line.split
 
-                    for word in words:
+                    for word in cleaned_words:
                         if word in self.__frequency:
                             self.__frequency[word] += 1
                         else:
                             self.__frequency[word] = 1
 
+            return True
+
         except FileNotFoundError:
-            print(f"file not found: {self.__filepath}")
+            print(f"File not found: {self.__filepath}")
             return False
     
     def print_report(self):
-        return 0
+
+        sorted_words = sorted(self.__frequency.keys())
+
+        for word in sorted_words:
+            print(f"{word}: {self.__frequency[word]}")
     
 def main():
     return 0
