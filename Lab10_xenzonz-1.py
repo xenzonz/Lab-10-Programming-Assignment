@@ -34,6 +34,9 @@ class WordAnalyzer:
                     cleaned_words: list[str] = cleaned_line.split()
 
                     for word in cleaned_words:
+                        if not word.isalpha():
+                            continue
+                        
                         if word in self.__frequency:
                             self.__frequency[word] += 1
                         else:
