@@ -28,6 +28,17 @@ class WordAnalyzer:
             
             translator = str.maketrans("", "", string.punctuation)
 
+            with self.__filepath.open("r", encoding="utf-8") as file:
+                for line in file:
+                    cleaned_line = line.lower().translate(translator)
+                    words: list[str] = cleaned_line.split
+
+                    for word in words:
+                        if word in self.__frequency:
+                            self.__frequency[word] += 1
+                        else:
+                            self.__frequency[word] = 1
+
         except FileNotFoundError:
             print(f"file not found: {self.__filepath}")
             return False
