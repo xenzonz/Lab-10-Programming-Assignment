@@ -1,14 +1,13 @@
-print("hello world")
 
 """
 Docstring for Lab10_xenzonz_1
-i. LAB 9: Word Count
+i. LAB 10: Word Count
 ii. Sam Cocquyt
 iii. An OOP-based program that displays a menu of 4 predefined text files, lets the user choose one, then reads and analyzes that file. 
     The program will count the frequency of every word in the selected file and print an alphabetical report.
     WordAnalyzer class will accept an optional list of "stop words" during initialization.
 iv. No starter code
-v. 3/15/2026
+v. 3/29/2026
 """
 
 import string
@@ -36,7 +35,7 @@ class WordAnalyzer:
                     for word in cleaned_words:
                         if not word.isalpha(): #remove numbers
                             continue
-                        if word.startswith("www"): #remove wwwgutenbergorg
+                        if word.startswith("www"): #remove wwwgutenbergorg etc.
                             continue
 
                         if word in self.__frequency:
@@ -62,13 +61,16 @@ def file_menu():
 
     base_path = Path(__file__).parent
     file_options: dict[str, Path] = {
-        "1": ("Monte Cristo", base_path / "monte_cristo.txt"),
-        "2": ("Princess of Mars", base_path / "princess_mars.txt"),
-        "3": ("Tarzan", base_path / "Tarzan.txt"),
-        "4": ("Treasure Island", base_path / "treasure_island.txt"),
+        "1": base_path / "monte_cristo.txt",
+        "2": base_path / "princess_mars.txt",
+        "3": base_path / "Tarzan.txt",
+        "4": base_path / "treasure_island.txt",
     }
 
     return file_options
+
+def display_name(filepath: Path) -> str:
+    return filepath.stem.replace("_", " ").title()
     
 def main():
     files = file_menu()
@@ -78,8 +80,8 @@ def main():
         print("\n--- Word Analyzer ---")
         print("Please select a file to analyze:")
 
-        for key, (label, _) in files.items():
-            print(f"  {key}. {label}")
+        for key, filepath in files.items():
+            print(f"  {key}. {display_name(filepath)}")
         print(f"  {exit_key}. Exit\n")
 
         choice = input(f"Enter your choice (1-{exit_key}): ").strip()
@@ -93,7 +95,7 @@ def main():
             input("\nPress Enter to return to the menu... ")
             continue
 
-        label, filepath = files[choice]
+        filepath = files[choice]
         print(f"\nProcessing '{filepath.name}'...\n")
 
         analyzer = WordAnalyzer(filepath)
